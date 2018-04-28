@@ -1,10 +1,10 @@
 <template>
 <div>
   <div class="grid">
-      <div class="row" v-for="(row, rowIndex) in values">
-          <div class="box" v-for="(item, columnIndex) in row">
+      <div class="row" :key="`row-${row}`" v-for="(row, rowIndex) in values">
+          <div class="box" :key="`column-${item}`" v-for="(item, columnIndex) in row">
             <div class="inner">{{item}}</div>
-            <input v-show="!mask[rowIndex][columnIndex]" class="inner">
+            <input :ref="`item-${rowIndex}-${columnIndex}`" v-show="mask[rowIndex][columnIndex] === 'a'" class="inner">
         </div>
       </div>
   </div>
@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import Vue from 'vue'
+
 export default {
 
   name: 'grid',
@@ -32,16 +34,29 @@ export default {
         ['1', '8', '6', '5', '2', '4', '9', '7', '3'],
       ],
       mask: [
-        [false, false, false, false, true, true, false, false, false],
-        [true, false, false, false, true, false, false, false, true],
-        [false, false, false, true, false, false, true, true, false],
-        [false, true, false, false, false, true, false, false, true],
-        [true, false, true, false, false, false, true, false, true],
-        [true, false, false, true, false, false, false, true, false],
-        [false, true, true, false, false, true, false, false, false],
-        [true, false, false, false, true, false, false, false, true],
-        [false, false, false, true, true, false, false, false, false],
+        ['a', 'a', 'a', 'a', 'b', 'b', 'a', 'a', 'a'],
+        ['b', 'a', 'a', 'a', 'b', 'a', 'a', 'a', 'b'],
+        ['a', 'a', 'a', 'b', 'a', 'a', 'b', 'b', 'a'],
+        ['a', 'b', 'a', 'a', 'a', 'b', 'a', 'a', 'b'],
+        ['b', 'a', 'b', 'a', 'a', 'a', 'b', 'a', 'b'],
+        ['b', 'a', 'a', 'b', 'a', 'a', 'a', 'b', 'a'],
+        ['a', 'b', 'b', 'a', 'a', 'b', 'a', 'a', 'a'],
+        ['b', 'a', 'a', 'a', 'b', 'a', 'a', 'a', 'b'],
+        ['a', 'a', 'a', 'b', 'b', 'a', 'a', 'a', 'a'],
       ]
+    }
+  },
+  methods: {
+    validate() {
+      Object.keys(this.$refs).forEach(key => {
+        const input = this.$refs[key]
+        const rowIndex = key.split('-')[1]
+        const columnIndex = key.split('-')[2]
+        const value = input[0].value
+        if (value === this.values[rowIndex][columnIndex]) {
+          Vue.set(this.mask[rowIndex], columnIndex, 'b')
+        }
+      })
     }
   }
 }
