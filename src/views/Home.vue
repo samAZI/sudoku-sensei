@@ -1,5 +1,5 @@
 <template>
-	<grid></grid>
+<grid></grid>
 </template>
 
 <script>

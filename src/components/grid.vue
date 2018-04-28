@@ -1,12 +1,16 @@
 <template>
-<div class="grid">
-    <div class="row" v-for="row in values">
-        <div class="box" v-for="item in row">
-          <div class="inner">{{item}}</div>
+<div>
+  <div class="grid">
+      <div class="row" v-for="(row, rowIndex) in values">
+          <div class="box" v-for="(item, columnIndex) in row">
+            <div class="inner">{{item}}</div>
+            <input v-show="!mask[rowIndex][columnIndex]" class="inner">
+        </div>
       </div>
-    </div>
+  </div>
+  <button class="btn btn-reset">Reset</button>
+  <button class="btn btn-validate" @click="validate">Valider</button>
 </div>
-
 </template>
 
 <script>
@@ -17,15 +21,26 @@ export default {
   data () {
     return {
       values: [
-        ['', '', '', '', '5', '3', '', '', ''],
-        ['4', '', '', '', '7', '', '', '', '5'],
-        ['', '', '', '1', '', '', '6', '8', ''],
-        ['', '6', '', '', '', '1', '', '', '7'],
-        ['3', '2', '', '', '', '', '1', '', '4'],
-        ['7', '', '', '4', '', '', '', '6', ''],
-        ['', '7', '3', '', '', '8', '', '', ''],
-        ['9', '', '', '', '6', '', '', '', '2'],
-        ['', '', '', '5', '2', '', '', '', ''],
+        ['6', '2', '9', '8', '5', '3', '7', '4', '1'],
+        ['4', '1', '8', '6', '7', '9', '3', '2', '5'],
+        ['5', '3', '7', '1', '4', '2', '6', '8', '9'],
+        ['8', '6', '4', '2', '9', '1', '5', '3', '7'],
+        ['3', '5', '2', '7', '8', '6', '1', '9', '4'],
+        ['7', '9', '1', '4', '3', '5', '2', '6', '8'],
+        ['2', '7', '3', '9', '1', '8', '4', '5', '6'],
+        ['9', '4', '5', '3', '6', '7', '8', '1', '2'],
+        ['1', '8', '6', '5', '2', '4', '9', '7', '3'],
+      ],
+      mask: [
+        [false, false, false, false, true, true, false, false, false],
+        [true, false, false, false, true, false, false, false, true],
+        [false, false, false, true, false, false, true, true, false],
+        [false, true, false, false, false, true, false, false, true],
+        [true, false, true, false, false, false, true, false, true],
+        [true, false, false, true, false, false, false, true, false],
+        [false, true, true, false, false, true, false, false, false],
+        [true, false, false, false, true, false, false, false, true],
+        [false, false, false, true, true, false, false, false, false],
       ]
     }
   }
@@ -33,6 +48,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.btn {
+  padding: 4px 10px;
+  text-align: center;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  margin-left: 10px;
+  &.btn-reset {
+    background-color: red;
+  }
+  &.btn-validate {
+    background-color: #23A913;
+  }  
+}
 .grid {
     margin: 0 auto;
     width: 80vw;
@@ -45,7 +75,7 @@ export default {
     display: flex;
 }
 .box {
-    background: tomato;
+    background: #AAAAAA;
     margin: 5px;
     color: white;
     font-weight: bold;
@@ -67,5 +97,9 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+}
+input {
+  font-size: 1rem;
 }
 </style>
