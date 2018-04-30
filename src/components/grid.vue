@@ -8,6 +8,7 @@
         </div>
       </div>
   </div>
+  <div>Nombre d'erreurs: {{validateErrors}}</div>
   <button class="btn btn-reset">Reset</button>
   <button class="btn btn-validate" @click="validate">Valider</button>
 </div>
@@ -15,6 +16,7 @@
 
 <script>
 import Vue from 'vue'
+import { generate }  from '@/modules/generateGrid'
 
 export default {
 
@@ -22,28 +24,41 @@ export default {
 
   data () {
     return {
-      values: [
-        ['6', '2', '9', '8', '5', '3', '7', '4', '1'],
-        ['4', '1', '8', '6', '7', '9', '3', '2', '5'],
-        ['5', '3', '7', '1', '4', '2', '6', '8', '9'],
-        ['8', '6', '4', '2', '9', '1', '5', '3', '7'],
-        ['3', '5', '2', '7', '8', '6', '1', '9', '4'],
-        ['7', '9', '1', '4', '3', '5', '2', '6', '8'],
-        ['2', '7', '3', '9', '1', '8', '4', '5', '6'],
-        ['9', '4', '5', '3', '6', '7', '8', '1', '2'],
-        ['1', '8', '6', '5', '2', '4', '9', '7', '3'],
-      ],
+      validateErrors: 0,
+      // values: [
+      //   ['6', '2', '9', '8', '5', '3', '7', '4', '1'],
+      //   ['4', '1', '8', '6', '7', '9', '3', '2', '5'],
+      //   ['5', '3', '7', '1', '4', '2', '6', '8', '9'],
+      //   ['8', '6', '4', '2', '9', '1', '5', '3', '7'],
+      //   ['3', '5', '2', '7', '8', '6', '1', '9', '4'],
+      //   ['7', '9', '1', '4', '3', '5', '2', '6', '8'],
+      //   ['2', '7', '3', '9', '1', '8', '4', '5', '6'],
+      //   ['9', '4', '5', '3', '6', '7', '8', '1', '2'],
+      //   ['1', '8', '6', '5', '2', '4', '9', '7', '3'],
+      // ],
+      values: generate(),
       mask: [
-        ['a', 'a', 'a', 'a', 'b', 'b', 'a', 'a', 'a'],
-        ['b', 'a', 'a', 'a', 'b', 'a', 'a', 'a', 'b'],
-        ['a', 'a', 'a', 'b', 'a', 'a', 'b', 'b', 'a'],
-        ['a', 'b', 'a', 'a', 'a', 'b', 'a', 'a', 'b'],
-        ['b', 'a', 'b', 'a', 'a', 'a', 'b', 'a', 'b'],
-        ['b', 'a', 'a', 'b', 'a', 'a', 'a', 'b', 'a'],
-        ['a', 'b', 'b', 'a', 'a', 'b', 'a', 'a', 'a'],
-        ['b', 'a', 'a', 'a', 'b', 'a', 'a', 'a', 'b'],
-        ['a', 'a', 'a', 'b', 'b', 'a', 'a', 'a', 'a'],
-      ]
+        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+      ],
+      // mask: [
+      //   ['a', 'a', 'a', 'a', 'b', 'b', 'a', 'a', 'a'],
+      //   ['b', 'a', 'a', 'a', 'b', 'a', 'a', 'a', 'b'],
+      //   ['a', 'a', 'a', 'b', 'a', 'a', 'b', 'b', 'a'],
+      //   ['a', 'b', 'a', 'a', 'a', 'b', 'a', 'a', 'b'],
+      //   ['b', 'a', 'b', 'a', 'a', 'a', 'b', 'a', 'b'],
+      //   ['b', 'a', 'a', 'b', 'a', 'a', 'a', 'b', 'a'],
+      //   ['a', 'b', 'b', 'a', 'a', 'b', 'a', 'a', 'a'],
+      //   ['b', 'a', 'a', 'a', 'b', 'a', 'a', 'a', 'b'],
+      //   ['a', 'a', 'a', 'b', 'b', 'a', 'a', 'a', 'a'],
+      // ]
     }
   },
   methods: {
@@ -53,8 +68,14 @@ export default {
         const rowIndex = key.split('-')[1]
         const columnIndex = key.split('-')[2]
         const value = input[0].value
+
         if (value === this.values[rowIndex][columnIndex]) {
           Vue.set(this.mask[rowIndex], columnIndex, 'b')
+        } else if (value) {
+          this.validateErrors += 1
+          input[0].classList.add('error')
+        } else if (input[0].classList.contains('error')) {
+          input[0].classList.remove('error')
         }
       })
     }
@@ -116,5 +137,13 @@ export default {
 }
 input {
   font-size: 1rem;
+
+  &.error {
+    background-color: red;
+  }
+}
+hr {
+  flex-grow: 1;
+  /* width: 100%; */ /* or this */
 }
 </style>
