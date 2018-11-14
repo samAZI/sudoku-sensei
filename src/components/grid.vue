@@ -4,7 +4,9 @@
       <div class="row" :key="`row-${row}`" v-for="(row, rowIndex) in values">
           <div class="box" :key="`column-${item}`" v-for="(item, columnIndex) in row">
             <div class="inner">{{item}}</div>
-            <input :ref="`item-${rowIndex}-${columnIndex}`" v-show="mask[rowIndex][columnIndex] === 'a'" class="inner">
+            <input :ref="`item-${rowIndex}-${columnIndex}`"
+                    v-show="mask[rowIndex][columnIndex] === 'a'"
+                    class="inner"/>
         </div>
       </div>
   </div>
@@ -15,72 +17,61 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import { generate }  from '@/modules/generateGrid'
+import Vue from 'vue';
+//import { generate } from '@/modules/generateGrid';
 
 export default {
 
   name: 'grid',
 
-  data () {
+  data() {
     return {
       validateErrors: 0,
-      // values: [
-      //   ['6', '2', '9', '8', '5', '3', '7', '4', '1'],
-      //   ['4', '1', '8', '6', '7', '9', '3', '2', '5'],
-      //   ['5', '3', '7', '1', '4', '2', '6', '8', '9'],
-      //   ['8', '6', '4', '2', '9', '1', '5', '3', '7'],
-      //   ['3', '5', '2', '7', '8', '6', '1', '9', '4'],
-      //   ['7', '9', '1', '4', '3', '5', '2', '6', '8'],
-      //   ['2', '7', '3', '9', '1', '8', '4', '5', '6'],
-      //   ['9', '4', '5', '3', '6', '7', '8', '1', '2'],
-      //   ['1', '8', '6', '5', '2', '4', '9', '7', '3'],
-      // ],
-      values: generate(),
-      mask: [
-        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
-        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
-        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
-        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
-        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
-        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
-        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
-        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
-        ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+      values: [
+        ['6', '2', '9', '8', '5', '3', '7', '4', '1'],
+        ['4', '1', '8', '6', '7', '9', '3', '2', '5'],
+        ['5', '3', '7', '1', '4', '2', '6', '8', '9'],
+        ['8', '6', '4', '2', '9', '1', '5', '3', '7'],
+        ['3', '5', '2', '7', '8', '6', '1', '9', '4'],
+        ['7', '9', '1', '4', '3', '5', '2', '6', '8'],
+        ['2', '7', '3', '9', '1', '8', '4', '5', '6'],
+        ['9', '4', '5', '3', '6', '7', '8', '1', '2'],
+        ['1', '8', '6', '5', '2', '4', '9', '7', '3'],
       ],
-      // mask: [
-      //   ['a', 'a', 'a', 'a', 'b', 'b', 'a', 'a', 'a'],
-      //   ['b', 'a', 'a', 'a', 'b', 'a', 'a', 'a', 'b'],
-      //   ['a', 'a', 'a', 'b', 'a', 'a', 'b', 'b', 'a'],
-      //   ['a', 'b', 'a', 'a', 'a', 'b', 'a', 'a', 'b'],
-      //   ['b', 'a', 'b', 'a', 'a', 'a', 'b', 'a', 'b'],
-      //   ['b', 'a', 'a', 'b', 'a', 'a', 'a', 'b', 'a'],
-      //   ['a', 'b', 'b', 'a', 'a', 'b', 'a', 'a', 'a'],
-      //   ['b', 'a', 'a', 'a', 'b', 'a', 'a', 'a', 'b'],
-      //   ['a', 'a', 'a', 'b', 'b', 'a', 'a', 'a', 'a'],
-      // ]
-    }
+      // values: generate(),
+      mask: [
+        ['a', 'a', 'a', 'a', 'b', 'b', 'a', 'a', 'a'],
+        ['b', 'a', 'a', 'a', 'b', 'a', 'a', 'a', 'b'],
+        ['a', 'a', 'a', 'b', 'a', 'a', 'b', 'b', 'a'],
+        ['a', 'b', 'a', 'a', 'a', 'b', 'a', 'a', 'b'],
+        ['b', 'a', 'b', 'a', 'a', 'a', 'b', 'a', 'b'],
+        ['b', 'a', 'a', 'b', 'a', 'a', 'a', 'b', 'a'],
+        ['a', 'b', 'b', 'a', 'a', 'b', 'a', 'a', 'a'],
+        ['b', 'a', 'a', 'a', 'b', 'a', 'a', 'a', 'b'],
+        ['a', 'a', 'a', 'b', 'b', 'a', 'a', 'a', 'a'],
+      ],
+    };
   },
   methods: {
     validate() {
-      Object.keys(this.$refs).forEach(key => {
-        const input = this.$refs[key]
-        const rowIndex = key.split('-')[1]
-        const columnIndex = key.split('-')[2]
-        const value = input[0].value
+      Object.keys(this.$refs).forEach((key) => {
+        const input = this.$refs[key];
+        const rowIndex = key.split('-')[1];
+        const columnIndex = key.split('-')[2];
+        const { value } = input[0];
 
         if (value === this.values[rowIndex][columnIndex]) {
-          Vue.set(this.mask[rowIndex], columnIndex, 'b')
+          Vue.set(this.mask[rowIndex], columnIndex, 'b');
         } else if (value) {
-          this.validateErrors += 1
-          input[0].classList.add('error')
+          this.validateErrors += 1;
+          input[0].classList.add('error');
         } else if (input[0].classList.contains('error')) {
-          input[0].classList.remove('error')
+          input[0].classList.remove('error');
         }
-      })
-    }
-  }
-}
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -97,7 +88,7 @@ export default {
   }
   &.btn-validate {
     background-color: #23A913;
-  }  
+  }
 }
 .grid {
     margin: 0 auto;
@@ -137,6 +128,7 @@ export default {
 }
 input {
   font-size: 1rem;
+    text-align: center;
 
   &.error {
     background-color: red;
