@@ -1,12 +1,12 @@
 <template>
 <div>
   <div class="grid">
-      <div class="row" :key="`row-${row}`" v-for="(row, rowIndex) in values">
-          <div class="box" :key="`column-${item}`" v-for="(item, columnIndex) in row">
+      <div class="row" :key="`row-${row}`" v-for="(row, y) in values">
+          <div class="box" :key="`column-${item}`" v-for="(item, x) in row">
             <div class="inner">{{item}}</div>
-            <input :ref="`item-${rowIndex}-${columnIndex}`"
-                    v-show="mask[rowIndex][columnIndex] === 'a'"
-                    class="inner"/>
+            <input :ref="`item-${y}-${x}`"
+                   v-show="mask[y][x] === 'a'"
+                   class="inner"/>
         </div>
       </div>
   </div>
@@ -18,7 +18,7 @@
 
 <script>
 import Vue from 'vue';
-//import { generate } from '@/modules/generateGrid';
+import { generate } from '@/modules/generateGrid';
 
 export default {
 
@@ -27,41 +27,30 @@ export default {
   data() {
     return {
       validateErrors: 0,
-      values: [
-        ['6', '2', '9', '8', '5', '3', '7', '4', '1'],
-        ['4', '1', '8', '6', '7', '9', '3', '2', '5'],
-        ['5', '3', '7', '1', '4', '2', '6', '8', '9'],
-        ['8', '6', '4', '2', '9', '1', '5', '3', '7'],
-        ['3', '5', '2', '7', '8', '6', '1', '9', '4'],
-        ['7', '9', '1', '4', '3', '5', '2', '6', '8'],
-        ['2', '7', '3', '9', '1', '8', '4', '5', '6'],
-        ['9', '4', '5', '3', '6', '7', '8', '1', '2'],
-        ['1', '8', '6', '5', '2', '4', '9', '7', '3'],
-      ],
-      // values: generate(),
+      values: generate(),
       mask: [
-        ['a', 'a', 'a', 'a', 'b', 'b', 'a', 'a', 'a'],
-        ['b', 'a', 'a', 'a', 'b', 'a', 'a', 'a', 'b'],
-        ['a', 'a', 'a', 'b', 'a', 'a', 'b', 'b', 'a'],
-        ['a', 'b', 'a', 'a', 'a', 'b', 'a', 'a', 'b'],
-        ['b', 'a', 'b', 'a', 'a', 'a', 'b', 'a', 'b'],
-        ['b', 'a', 'a', 'b', 'a', 'a', 'a', 'b', 'a'],
-        ['a', 'b', 'b', 'a', 'a', 'b', 'a', 'a', 'a'],
-        ['b', 'a', 'a', 'a', 'b', 'a', 'a', 'a', 'b'],
-        ['a', 'a', 'a', 'b', 'b', 'a', 'a', 'a', 'a'],
+        ['b', 'a', 'b', 'b', 'b', 'a', '42', 'b', 'a'],
+        ['b', 'b', 'b', 'b', 'a', 'b', 'b', 'b', 'b'],
+        ['a', 'b', 'a', 'b', 'b', 'b', 'a', 'b', 'b'],
+        ['b', 'a', 'a', 'b', 'a', 'b', 'b', 'a', 'a'],
+        ['b', 'b', 'a', 'b', 'a', 'b', 'b', 'b', 'b'],
+        ['a', 'a', 'b', 'b', 'b', 'a', 'b', 'b', 'b'],
+        ['a', 'b', 'b', 'a', 'b', 'b', 'a', 'a', 'b'],
+        ['b', 'b', 'b', 'a', 'b', 'b', 'b', 'a', 'a'],
+        ['b', 'a', 'b', 'b', 'b', 'a', 'b', 'a', 'b'],
       ],
-    };
+    }
   },
   methods: {
     validate() {
-      Object.keys(this.$refs).forEach((key) => {
-        const input = this.$refs[key];
-        const rowIndex = key.split('-')[1];
-        const columnIndex = key.split('-')[2];
-        const { value } = input[0];
+      Object.keys(this.$refs).forEach(key => {
+        const input = this.$refs[key]
+        const y = key.split('-')[1]
+        const x = key.split('-')[2]
+        const value = input[0].value
 
-        if (value === this.values[rowIndex][columnIndex]) {
-          Vue.set(this.mask[rowIndex], columnIndex, 'b');
+        if (value === this.values[y][x]) {
+          Vue.set(this.mask[y], x, 'b')
         } else if (value) {
           this.validateErrors += 1;
           input[0].classList.add('error');
